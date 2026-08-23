@@ -1,0 +1,36 @@
+name: sjia-scrna
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - numpy>=1.26
+  - pandas>=2.0
+  - scipy>=1.11
+  - matplotlib>=3.8
+  - seaborn>=0.13
+  - scanpy>=1.10
+  - anndata>=0.10
+  - leidenalg>=0.10
+  - igraph>=0.11
+  - scikit-learn>=1.4
+  - scikit-misc
+  - umap-learn>=0.5
+  - openpyxl
+  - pyyaml
+  - tqdm
+  - jupyter
+  - ipykernel
+  - pip:
+    - scvi-tools>=1.1
+    - harmonypy>=0.0.9
+    - bbknn>=1.6
+    - scrublet>=0.2.3
+    - celltypist>=1.6
+    - pertpy>=0.7
+    - decoupler>=1.6
+    - scib>=1.1
+    - mudata>=0.2
+    - GEOparse>=2.0

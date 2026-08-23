@@ -1,0 +1,41 @@
+# Data files (downloaded from GEO)
+data/
+!data/.gitkeep
+*.h5
+*.xlsx
+
+# Checkpoints and logs (large binary files)
+results/checkpoints/
+*.h5ad
+*.log
+results/pipeline.log
+
+# External / sub-projects
+scientific-agent-skills/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

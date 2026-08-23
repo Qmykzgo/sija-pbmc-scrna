@@ -1,0 +1,123 @@
+# ============================================================================
+# SJIA PBMC scRNA-seq Pipeline Configuration
+# ============================================================================
+
+# --- Paths ---
+paths:
+  data_dir: "data"
+  results_dir: "results"
+  figures_dir: "results/figures"
+  checkpoints_dir: "results/checkpoints"
+
+# --- Dataset ---
+dataset:
+  geo_accession: "GSE207633"
+  # Subset of 4 samples used in this analysis
+  samples:
+    - id: "GSM6304149_Healthy_609"
+      geo_id: "GSM6304149"
+      condition: "Control"
+      patient: "PID-200609"
+    - id: "GSM6304152_Healthy_974"
+      geo_id: "GSM6304152"
+      condition: "Control"
+      patient: "PID-200974"
+    - id: "GSM6304166_MAS_1020"
+      geo_id: "GSM6304166"
+      condition: "MAS"
+      patient: "PID-201020"
+    - id: "GSM6304167_MAS_785"
+      geo_id: "GSM6304167"
+      condition: "MAS"
+      patient: "PID-200785"
+  # Clinical metadata file
+  clinical_meta: "GSE207633_Patient_Clinical-MetaData.xlsx"
+  cell_meta: "GSE207633_ScRNASeq-MetaData.xlsx"
+
+# --- Quality Control ---
+qc:
+  min_genes: 200
+  min_cells: 3
+  min_counts: 500
+  max_counts: 25000
+  min_genes_by_counts: 700
+  max_genes_by_counts: 4000
+  max_mt_pct: 25.0
+  scrublet_threshold: 0.25
+  # Genes to remove after QC
+  remove_gene_prefixes:
+    - "MT-"
+    - "RPL"
+    - "RPS"
+    - "MALAT1"
+
+# --- Preprocessing ---
+preprocessing:
+  target_sum: 10000       # normalize_total target
+  n_top_genes: 3000       # number of HVGs
+  n_pcs: 50               # PCA components
+
+# --- Integration ---
+integration:
+  methods:
+    - "harmony"
+    - "scvi"
+  batch_key: "id"
+  # scVI-specific
+  scvi:
+    n_latent: 10
+    n_hidden: 128
+    n_layers: 1
+    dropout_rate: 0.1
+    max_epochs: 50
+    early_stopping: true
+
+# --- Clustering ---
+clustering:
+  n_neighbors: 15
+  n_pcs: 30
+  resolution: 1.0
+  algorithm: "leiden"
+
+# --- Annotation ---
+annotation:
+  celltypist_model: "Immune_All_Low.pkl"
+  # Marker genes for validation
+  markers:
+    T_cells: ["CD3E", "CD3D"]
+    CD4_T: ["CD4", "IL7R"]
+    CD8_T: ["CD8A", "CD8B"]
+    Treg: ["FOXP3", "IL2RA"]
+    NK: ["GNLY", "NKG7", "KLRD1"]
+    B_cells: ["CD19", "MS4A1", "CD79A"]
+    Monocytes_CD14: ["CD14", "LYZ", "S100A8"]
+    Monocytes_CD16: ["FCGR3A", "MS4A7"]
+    DC: ["FCER1A", "CST3"]
+    pDC: ["LILRA4", "IRF7"]
+    Platelets: ["PPBP", "PF4"]
+
+# --- Differential / Compositional ---
+differential:
+  # scCODA
+  sccoda:
+    reference_cell_type: "Naive B cells"
+    fdr: 0.3
+  # Milo
+  milo:
+    n_neighbors: 30
+    design: "~ clin_group"
+    prop: 0.1
+
+# --- Pathway ---
+pathway:
+  progeny:
+    organism: "human"
+    top_genes: 500
+
+# --- Visualization ---
+visualization:
+  dpi: 150
+  dpi_save: 300
+  format: "pdf"
+  figsize_default: [5, 5]
+  palette: "tab20"
